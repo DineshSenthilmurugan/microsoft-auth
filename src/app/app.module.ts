@@ -32,9 +32,10 @@ export function loggerCallback(logLevel: LogLevel, message: string) {
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: 'de8bc8b5-d9f9-48b1-a8ad-b748da725064',
-      authority: '1987bc45-e629-47d3-9326-b5300dd15e34',
-      redirectUri: '/',
+      clientId: '00000002-0000-0ff1-ce00-000000000000', //'de8bc8b5-d9f9-48b1-a8ad-b748da725064',
+      authority:
+        'https://login.microsoftonline.com/1987bc45-e629-47d3-9326-b5300dd15e34',
+      redirectUri: 'https://outlook.office.com/owa/',
       postLogoutRedirectUri: '/',
     },
     cache: {
@@ -53,7 +54,9 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  protectedResourceMap.set(window.location.origin, ['user.read', 'profile']);
+  protectedResourceMap.set("'https://graph.microsoft.com/v1.0/me'", [
+    'user.read',
+  ]);
 
   return {
     interactionType: InteractionType.Redirect,
@@ -65,7 +68,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: [...['user.read', 'profile']],
+      scopes: [...['user.read']],
     },
     loginFailedRoute: '/login-failed',
   };
